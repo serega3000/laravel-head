@@ -184,7 +184,7 @@ class LaravelHead {
 	 * @return string
 	 */ 
 	public function render()
-	{
+	{		
 		return 
 			$this->tagCharset().
 			$this->tagTitle().
@@ -924,9 +924,9 @@ class LaravelHead {
 		{
 			$path = $this->getConfig('assets.paths.css') . '/';
 		}
-
 		foreach ($this->stylesheets as $file => $options)
 		{
+			$file = str_replace("__dot__",".",$file);
 			// Set default value for median attribute
 			$media = 'all';
 
@@ -962,7 +962,6 @@ class LaravelHead {
 					$media = $options[0];
 				}
 			}
-
 			// Stylesheet is an external resource
 			if ($cdn)
 			{
@@ -992,10 +991,11 @@ class LaravelHead {
 	 * @return void
 	 */ 
 	public function addCss($css = array())
-	{
+	{				
 		foreach ($css as $file => $options)
 		{
-			$this->stylesheets = array_add($this->stylesheets, $file, $options);
+			//$this->stylesheets = array_add($this->stylesheets, $file, $options);
+			$this->stylesheets[str_replace(".", "__dot__", $file)] = $options;
 		}
 	}
 
@@ -1005,7 +1005,7 @@ class LaravelHead {
 	 * @return void
 	 */ 
 	public function addOneCss($file, $media = '', $cond = '')
-	{
+	{		
 		$this->addCss(array($file => array($media, $cond)));
 	}
 
@@ -1034,6 +1034,7 @@ class LaravelHead {
 
 		foreach ($this->scripts as $file => $options)
 		{
+			$file = str_replace("__dot__",".",$file);
 			// Initialize starting string for conditional comments
 			$start_cond = '';
 			// Initialize ending string for conditional comments
@@ -1106,7 +1107,8 @@ class LaravelHead {
 	{
 		foreach ($script as $file => $options)
 		{
-			$this->scripts = array_add($this->scripts, $file, $options);
+			//$this->scripts = array_add($this->scripts, $file, $options);
+			$this->scripts[str_replace(".","__dot__", $file)] = $options;
 		}
 	}
 
